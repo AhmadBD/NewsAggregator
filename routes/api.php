@@ -14,9 +14,11 @@ use Illuminate\Support\Facades\Route;
 |
 */
 
-Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
-    return $request->user();
-});
+//Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
+//    return $request->user();
+//});
 Route::middleware('throttle:api')->group(function () {
-    Route::get('/news', 'NewsController@index');
+    Route::get('/news', 'App\Http\Controllers\NewsController@getNews');
+    Route::get('/categories', 'App\Http\Controllers\NewsController@getCategories');
+    Route::get('/countries', 'App\Http\Controllers\NewsController@getCountries');
 });
