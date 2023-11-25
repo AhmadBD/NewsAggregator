@@ -13,7 +13,7 @@ class NewsApiTest extends TestCase
     /**
      * A basic test example.
      */
-    public function test_the_application_returns_a_successful_response(): void
+    public function testGetNews(): void
     {
         Article::factory()->count(11)->create([
             'country_id' => Country::whereCode('us')->first()->id,
@@ -43,5 +43,23 @@ class NewsApiTest extends TestCase
         $this->assertArrayHasKey('country_name', $news[0]);
         $this->assertArrayHasKey('category_name', $news[0]);
 
+    }
+    public function testGetCategories(): void
+    {
+        $response = $this->get('/api/categories');
+        $response->assertStatus(200);
+        $categories = $response->json();
+        $this->assertIsArray($categories);
+        $this->assertGreaterThanOrEqual(1, count($categories));
+        $this->assertNotNull($categories[0]);
+    }
+    public function testGetCountries(): void
+    {
+        $response = $this->get('/api/countries');
+        $response->assertStatus(200);
+        $countries = $response->json();
+        $this->assertIsArray($countries);
+        $this->assertGreaterThanOrEqual(1, count($countries));
+        $this->assertNotNull($countries[0]);
     }
 }

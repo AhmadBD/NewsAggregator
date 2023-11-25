@@ -24,12 +24,12 @@ class NewsController extends BaseController
     }
     public function getCategories()
     {
-        $categories = Category::select('name')->get();
+        $categories = Category::select('name')->get()->pluck('name');
         return response()->json($categories);
     }
     public function getCountries()
     {
-        $countries = Country::select('code')->get();
+        $countries = Country::select('code')->get()->pluck('code');
         return response()->json($countries);
     }
 }
