@@ -11,14 +11,13 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('countries', function (Blueprint $table) {
+        Schema::create('categories', function (Blueprint $table) {
             $table->id();
-            $table->string('code')->unique();
-            $table->string('name');
+            $table->string('name')->unique();
             $table->timestamps();
         });
         Schema::table('articles', function (Blueprint $table) {
-            $table->foreignId('country_id')->nullable()->constrained('countries');
+            $table->foreignId('category_id')->nullable()->constrained('categories');
         });
     }
 
@@ -27,6 +26,6 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('countries');
+        Schema::dropIfExists('categories');
     }
 };
