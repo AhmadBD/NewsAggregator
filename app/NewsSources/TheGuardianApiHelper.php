@@ -18,7 +18,7 @@ class TheGuardianApiHelper implements FetchesNewsInterface
      * @param $category
      * @return int
      */
-    public static function fetchPage(int $page, string $dateFrom, string $dateTo, mixed $pageSize, $country, $category): int
+    public function fetchPage(int $page, string $dateFrom, string $dateTo, mixed $pageSize, $country, $category): int
     {
         $url = "https://content.guardianapis.com/search?from-date=$dateFrom&to-date=$dateTo&currentPage=$page&pageSize=$pageSize&show-fields=thumbnail,body&api-key=" . config('news_sources.guardian.api_key');
         if($country){
@@ -36,7 +36,7 @@ class TheGuardianApiHelper implements FetchesNewsInterface
             $articles = $data['results'];
             $totalResults = $data['total'];
             foreach ($articles as $article) {
-                $detectedCategory = static::getCategory($article['sectionId']);
+                $detectedCategory = $this->getCategory($article['sectionId']);
                 \App\Models\Article::firstOrCreate(
                     [
                         'source' => 'The Guardian',
@@ -74,7 +74,7 @@ class TheGuardianApiHelper implements FetchesNewsInterface
         'sports'=>['sport','football'],
         'technology'=>['technology']
     ];
-    private static function getCategory($subCategory){
+    private function getCategory($subCategory){
         foreach (static::$categoryMap as $category=>$subCategories){
             if(in_array($subCategory,$subCategories)){
                 return $category;
@@ -82,4 +82,9 @@ class TheGuardianApiHelper implements FetchesNewsInterface
         }
         return null;
     }
+    public function getMaxPageSize(): int
+    {
+        return 100;
+    }
+
 }

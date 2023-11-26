@@ -17,7 +17,7 @@ class NewsApiOrgHelper implements FetchesNewsInterface
      * @param $category
      * @return int
      */
-    public static function fetchPage(int $page,  string $dateFrom, string $dateTo, mixed $pageSize, $country, $category): int
+    public function fetchPage(int $page,  string $dateFrom, string $dateTo, mixed $pageSize, $country, $category): int
     {
         $url = "https://newsapi.org/v2/top-headlines?from=$dateFrom&to=$dateTo&page=$page&pageSize=$pageSize&apiKey=" . config('news_sources.newsapiorg.api_key');
         if($country){

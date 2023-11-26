@@ -17,7 +17,7 @@ class NewsSourcesTest extends TestCase
      */
     public function testFetchFromNewsApiOrg(): void
     {
-        NewsApiOrgHelper::fetch('us', 'business',today(),10);
+        (new NewsApiOrgHelper)->fetch('us', 'business',today(),10);
         $this->assertGreaterThanOrEqual(1, Article::count());
         $article = Article::first();
         $this->assertNotNull($article->title);
@@ -28,7 +28,7 @@ class NewsSourcesTest extends TestCase
     }
     public function testFetchFromNewsApiOrg1000(): void
     {
-        NewsApiOrgHelper::fetch('us', 'business',today(),40);
+        (new NewsApiOrgHelper)->fetch('us', 'business',today(),40);
         $this->assertGreaterThanOrEqual(1, Article::count());
         $article = Article::first();
         $this->assertNotNull($article->title);
@@ -39,7 +39,7 @@ class NewsSourcesTest extends TestCase
     }
     public function testFetchFromTheGuardian(): void
     {
-        TheGuardianApiHelper::fetch('us', null,today(),10);
+        (new TheGuardianApiHelper)->fetch('us', null,today(),10);
         $this->assertGreaterThanOrEqual(1, Article::count());
         $article = Article::first();
         $this->assertNotNull($article->title);
@@ -50,7 +50,7 @@ class NewsSourcesTest extends TestCase
     }
     public function testFetchFromTheGuardian1000(): void
     {
-        TheGuardianApiHelper::fetch('us', null,today(),30);
+        (new TheGuardianApiHelper)->fetch('us', null,today(),30);
         $this->assertGreaterThanOrEqual(1, Article::count());
         $article = Article::first();
         $this->assertNotNull($article->title);
