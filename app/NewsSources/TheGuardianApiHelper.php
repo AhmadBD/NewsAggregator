@@ -36,29 +36,29 @@ class TheGuardianApiHelper implements FetchesNewsInterface
             $articles = $data['results'];
             $totalResults = $data['total'];
             foreach ($articles as $article) {
-                $detectedCategory = $this->getCategory($article['sectionId']);
+                $detectedCategory = isset($article['sectionId'])?$this->getCategory($article['sectionId']):null;
                 \App\Models\Article::firstOrCreate(
                     [
                         'source' => 'The Guardian',
 //                        'author' => $article['author'],
-                        'title' => $article['webTitle'],
+                        'title' => $article['webTitle']??null,
 //                        'description' => $article['description'], no description in the guardian api
-                        'url' => $article['webUrl'],
-                        'image_url' => $article['fields']['thumbnail'],
-                        'content' => $article['fields']['body'],
+                        'url' => $article['webUrl']??null,
+                        'image_url' => $article['fields']['thumbnail']??null,
+                        'content' => $article['fields']['body']??null,
                         'published_at' => Carbon::createFromDate($article['webPublicationDate']),
                         'country_id' => $country?->id,
                         'category_id' => $detectedCategory?Category::query()->where('name', $detectedCategory)->first()?->id:null,
-                        'sub_category'=>$article['sectionId']
+                        'sub_category'=>$article['sectionId']??null,
                     ]
                 );
             }
         }
         else{
-            if ($data['status']=='error') {
-                \Log::error($data['message']);
+            if (isset($data['status'])&&$data['status']=='error') {
+                \Log::error($data['message']??'unknown error');
                 if (env('APP_DEBUG')) {
-                    dd($data['message']);
+                    dd($data['message']??'unknown error');
                 }
             }
             $totalResults=0;

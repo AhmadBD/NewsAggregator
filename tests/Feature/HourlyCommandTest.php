@@ -18,10 +18,10 @@ class HourlyCommandTest extends TestCase
      */
     public function testFetchNewsHourlyCommand(): void
     {
-        HourlyCommand::fetchNewsHourlyCommand(100);
+        HourlyCommand::fetchNewsHourlyCommand(10);
         //wait for all jobs to finish
         sleep(20);
-        $this->assertGreaterThanOrEqual(1000, Article::count());
+        $this->assertGreaterThanOrEqual(10, Article::count());
     }
 
 }

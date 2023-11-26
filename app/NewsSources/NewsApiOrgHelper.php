@@ -33,14 +33,14 @@ class NewsApiOrgHelper implements FetchesNewsInterface
             foreach ($articles as $article) {
                 \App\Models\Article::firstOrCreate(
                     [
-                        'source' => $article['source']['name'],
-                        'author' => $article['author'],
-                        'title' => $article['title'],
-                        'description' => $article['description'],
-                        'url' => $article['url'],
-                        'image_url' => $article['urlToImage'],
-                        'content' => $article['content'],
-                        'published_at' => Carbon::createFromDate($article['publishedAt']),
+                        'source' => $article['source']['name']??null,
+                        'author' => $article['author']??null,
+                        'title' => $article['title']??null,
+                        'description' => $article['description']??null,
+                        'url' => $article['url']??null,
+                        'image_url' => $article['urlToImage']??null,
+                        'content' => $article['content']??null,
+                        'published_at' => isset($article['publishedAt'])?Carbon::createFromDate($article['publishedAt']):null,
                         'country_id' => $country?->id,
                         'category_id' => $category?->id,
                     ]
@@ -48,10 +48,10 @@ class NewsApiOrgHelper implements FetchesNewsInterface
             }
         }
         else{
-            if ($response->json()['status']=='error') {
-                \Log::error($response->json()['message']);
+            if (isset($response->json()['status']) && $response->json()['status'] == 'error') {
+                \Log::error($response->json()['message']??'unknown error');
                 if (env('APP_DEBUG')) {
-                    dd($response->json()['message']);
+                    dd($response->json()['message']??'unknown error');
                 }
             }
             $totalResults=0;
