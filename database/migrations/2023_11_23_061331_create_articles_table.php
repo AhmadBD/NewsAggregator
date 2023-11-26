@@ -15,12 +15,13 @@ return new class extends Migration
             $table->id();
             $table->string('title');
             $table->longText('content')->nullable();
-            $table->string('image_url')->nullable();
-            $table->string('description')->nullable();
-            $table->string('url')->nullable();
+            $table->text('image_url')->nullable();
+            $table->text('description')->nullable();
+            $table->text('url')->nullable();
             $table->dateTime('published_at')->nullable();
             $table->string('source')->nullable();
             $table->string('author')->nullable();
+            $table->string('sub_category')->nullable();
             $table->timestamps();
         });
     }

@@ -4,25 +4,33 @@ namespace App\NewsSources;
 
 use Carbon\Carbon;
 
-class NewsApiOrgHelper
+class NewsApiOrgHelper implements FetchesNewsInterface
 {
-    public static function fetch(string $countryCode, string $categoryName, string $date,$limit=100): void
+    use FetchesNews;
+
+    /**
+     * @param int $page
+     * @param string $dateFrom
+     * @param string $dateTo
+     * @param mixed $pageSize
+     * @param $country
+     * @param $category
+     * @return int
+     */
+    public static function fetchPage(int $page,  string $dateFrom, string $dateTo, mixed $pageSize, $country, $category): int
     {
-        $pages=intval($limit/100);
-        $pageSize= min($limit, 100);
-        $page=0;
-        do {
-            //date must be in iso 8601 format (use whole day)
-            $dateFrom = date('Y-m-d', strtotime($date));
-            $dateTo = date('Y-m-d', strtotime($date . ' +1 day'));
-            $page++;
-            $url = "https://newsapi.org/v2/top-headlines?country=$countryCode&category=$categoryName&from=$dateFrom&to=$dateTo&page=$page&pageSize=$pageSize&apiKey=" . config('news_sources.newsapiorg.api_key');
-            $response = \Http::get($url);
+        $url = "https://newsapi.org/v2/top-headlines?from=$dateFrom&to=$dateTo&page=$page&pageSize=$pageSize&apiKey=" . config('news_sources.newsapiorg.api_key');
+        if($country){
+            $url.="&country=".$country->code;
+        }
+        if ($category) {
+            $url.="&category=".$category->name;
+        }
+        $response = \Http::get($url);
+        if($response->json()['status']=='ok'){
             $articles = $response->json()['articles'];
             $totalResults = $response->json()['totalResults'];
             foreach ($articles as $article) {
-                $country = \App\Models\Country::where('code',$countryCode)->firstOrFail();
-                $category = \App\Models\Category::firstOrCreate(['name' => $categoryName]);
                 \App\Models\Article::firstOrCreate(
                     [
                         'source' => $article['source']['name'],
@@ -33,12 +41,21 @@ class NewsApiOrgHelper
                         'image_url' => $article['urlToImage'],
                         'content' => $article['content'],
                         'published_at' => Carbon::createFromDate($article['publishedAt']),
-                        'country_id' => $country->id,
-                        'category_id' => $category->id,
+                        'country_id' => $country?->id,
+                        'category_id' => $category?->id,
                     ]
                 );
             }
-            sleep(1);//to avoid rate limit
-        }while (($totalResults > $pageSize * $page)&&($page<$pages));
+        }
+        else{
+            if ($response->json()['status']=='error') {
+                \Log::error($response->json()['message']);
+                if (env('APP_DEBUG')) {
+                    dd($response->json()['message']);
+                }
+            }
+            $totalResults=0;
+        }
+        return $totalResults;
     }
 }
