@@ -2,9 +2,12 @@
 ## About News Aggregator
 News Aggregator is a web application that allows users to view news articles from various sources.
 ## Author
-[Ahmad Bwidani](mailto:ahmad2135@gmail.com)
+Ahmad Bwidani
+- [Linked In](https://www.linkedin.com/in/ahmad-bwidani-03507413b/)
+- [Github](https://github.com/AhmadBD)
+- [E-Mail](mailto:ahmad2135@gmail.com)
 
-## register for an API key
+## register for API keys
 To use the application, you need to register for an API key from the following websites:
 - [News API](https://newsapi.org/)
 - [The Guardian](https://open-platform.theguardian.com/access/)
