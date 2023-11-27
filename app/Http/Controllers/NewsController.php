@@ -16,10 +16,18 @@ class NewsController extends BaseController
         $data = request()->validate([
             'country' => 'required|exists:countries,code',
             'category' => 'required|exists:categories,name',
+            'search' => 'nullable|string',
         ]);
         $country = Country::whereCode($data['country'])->first();
         $category = Category::whereName($data['category'])->first();
-        $articles = $country->articles()->whereCategoryId($category->id)->paginate(10);
+        $query = $country->articles();
+        if (isset($data['search'])) {
+            $query = $query->where(function ($query) use ($data) {
+                $query->where('title', 'like', '%' . $data['search'] . '%')
+                    ->orWhere('content', 'like', '%' . $data['search'] . '%');
+            });
+        }
+        $articles = $query->whereCategoryId($category->id)->paginate(10);
         return response()->json($articles);
     }
     public function getCategories()

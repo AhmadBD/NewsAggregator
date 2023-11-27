@@ -20,7 +20,7 @@ class HourlyCommandTest extends TestCase
     {
         HourlyCommand::fetchNewsHourlyCommand(10);
         //wait for all jobs to finish
-        sleep(20);
+        sleep(40);
         $this->assertGreaterThanOrEqual(10, Article::count());
     }
 

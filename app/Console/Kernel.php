@@ -20,7 +20,7 @@ class Kernel extends ConsoleKernel
     {
         $schedule->call(function () {
             HourlyCommand::fetchNewsHourlyCommand();
-        })->hourly();
+        })->everyMinute();
     }
 
     /**
