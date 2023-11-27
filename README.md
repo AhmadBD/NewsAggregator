@@ -24,22 +24,22 @@ then run the following commands:
 ```
 > php artisan serve
 ```
-to run the scheduler, run the following command:
+to run the scheduler, run the following command in a separate terminal:
 ```
 > php artisan schedule:run
 ```
 ## Running the tests
-To run the tests, run the following command (don't forget to edit your .env.testing file to add the API keys):
+To run the tests, run the following command:
 ```
 > php artisan test
 ```
 ## using the api
-The application has the following endpoints:
+#### The application has the following endpoints:
 - /api/news
 - /api/categories
 - /api/countries
 
-The /api/news endpoint takes the following parameters:
+#### The /api/news endpoint takes the following parameters:
 - country: the country of the news source (in ISO 3166-1 alpha-2 format e.g. us, gb, fr, etc.)
 - category: the category of the news source (e.g. business, entertainment, general, ... the full list is available at /api/categories)
 - search: a search query
