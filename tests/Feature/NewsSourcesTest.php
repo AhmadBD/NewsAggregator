@@ -7,6 +7,7 @@ use App\Models\Article;
 use App\Models\Category;
 use App\Models\Country;
 use App\NewsSources\NewsApiOrgHelper;
+use App\NewsSources\NyTimesApiHelper;
 use App\NewsSources\TheGuardianApiHelper;
 use Tests\TestCase;
 
@@ -57,5 +58,16 @@ class NewsSourcesTest extends TestCase
 //        $this->assertNotNull($article->content);
         $this->assertEquals('us', $article->country->code);
         $this->assertNotNull($article->sub_category);
+    }
+    public function testFetchFromNewYorkTimes(): void
+    {
+        (new NyTimesApiHelper())->fetch('us', null,today(),10);
+        $this->assertGreaterThanOrEqual(1, Article::count());
+        $article = Article::first();
+        $this->assertNotNull($article->title);
+//        $this->assertNotNull($article->content);
+        $this->assertEquals('us', $article->country->code);
+        $this->assertNotNull($article->sub_category);
+
     }
 }

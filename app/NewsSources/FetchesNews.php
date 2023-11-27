@@ -14,8 +14,8 @@ trait FetchesNews
         $pages=intval($limit/ static::getMaxPageSize());
         $pageSize= min($limit, $this->getMaxPageSize());
         $page=1;
-        //date must be in iso 8601 format (use whole month)
-        $dateFrom = date('Y-m-d', strtotime($date.' -1 month'));
+        //date must be in iso 8601 format (use whole day)
+        $dateFrom = date('Y-m-d', strtotime($date));
         $dateTo = date('Y-m-d', strtotime($date . ' +1 day'));
         $country = $countryCode?\App\Models\Country::where('code',$countryCode)->first():null;
         $category = $categoryName?\App\Models\Category::firstWhere(['name' => $categoryName]):null;
